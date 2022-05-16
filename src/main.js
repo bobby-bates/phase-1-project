@@ -5,6 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // console.log(process.env)
 })
 
-fetch('API_KEY.txt')
-    .then(r => r.text())
-    .then(KEY => console.log(KEY))
+function apiKey() {
+    fetch('API_KEY.txt')
+        .then(r => r.text())
+        .then(KEY => console.log(KEY))
+        .catch(error => console.log(error))
+}
+apiKey()
+
+let map
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 39.832920, lng: -75.151920 },
+        zoom: 16,
+    })
+}
+
+window.apiKey = apiKey
+window.initMap = initMap
