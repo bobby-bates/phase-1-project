@@ -28,25 +28,34 @@ function apiKey() {
 
 //=== For DYNAMIC Google Map script loading: ===//
 function initMap(key) {
+    // Location lat lngs:
+    const centerUS = { lat: 39.833333, lng: -98.583333 }
+    const apartment = { lat: 39.832740, lng: -75.152101 }
+
     // const loader = new Loader({
     const loader = new google.maps.plugins.loader.Loader({
         apiKey: key,
         version: 'weekly',
-        // libraries: ['places']
+        authReferrerPolicy: 'origin', // May break if HTTP Referrer Restrictions
+        language: 'en',                 // don't match
+        region: 'US',
+        // libraries: ['places'] // Adds add'l features like Places API
     })
-
     const mapOptions = {
-        center: {
-            lat: 39.832920,
-            lng: -75.151920
-        },
-        zoom: 16
+        center: centerUS,
+        zoom: 5,
+        mapTypeId: 'terrain',
     }
-
     loader
         .load()
         .then(() => { // google not needed as arg for some reason 🤔
-            new google.maps.Map(document.getElementById('map'), mapOptions)
+            const map = new google.maps.Map(document.getElementById('map'), mapOptions)
+            console.log('Sweet map.')
+            // debugger
+            new google.maps.Marker({
+                position: apartment,
+                map: map,
+            })
         })
         .catch(e => console.error('Loader error:', e))
 }
