@@ -1,15 +1,16 @@
 # Flatiron Phase 1 Project
 
-Using HTML, CSS, JavaScript and the Google Maps JavaScript API
+Using **HTML**, **CSS**, **JavaScript** and the **Google Maps JavaScript API**
 
 ## Installation
 
-```bash
-npm install
-```
+`npm install`
 
 ## Usage
 
-![image](https://i.imgur.com/lznLsFX.png)
-![image](https://i.imgur.com/JBK1mh7.png)
-![image](https://i.imgur.com/OjcSECy.jpg)
+![Image](https://i.imgur.com/lznLsFX.png)
+![Image](https://i.imgur.com/JBK1mh7.png)
+![Image](https://i.imgur.com/OjcSECy.jpg)
+
+## TODO
+- Update `map`'s `viewport` within `onPlaceChanged()` using `placeData.viewport`

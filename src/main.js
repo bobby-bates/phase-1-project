@@ -73,22 +73,15 @@ function initMap(key) {
         .then(() => { // google not needed as arg for some reason 🤔
             // debugger
             map = new google.maps.Map(document.getElementById('map'), mapOptions)
-            // new google.maps.Marker({
-            //     position: apartment,
-            //     map: map,
-            // })
-            // debugger
             initAutocomplete(map)
         })
         .catch(e => console.error('Loader error:', e))
         .finally(() => console.log('🗺💯'))
-    // debugger
+
     let autocomplete
     function initAutocomplete(){
-        // debugger
         const input = document.getElementById('autocomplete')
         const options = {
-            // types: ['establishment'],
             componentRestrictions: { 'country': ['US'] },
             // fields narrows results = less $ per search:
             fields: [
@@ -100,57 +93,48 @@ function initMap(key) {
                 // 'place_id',
                 // photos returns <= 10 PlacePhoto objects of Place
                 'photos',
-                // types returns arr of types for this Place (for example,
+                // types returns arr of types for this Place (e.g.,
                     // ["political", "locality"] or ["restaurant", "establishment"])
                 // 'types',
             ],
-            // Bounds of continental US:
+            // Set search bounds within continental US:
             bounds: contUSBounds,
             strictBounds: true,
         }
 
         autocomplete = new google.maps.places.Autocomplete(input, options)
-        // debugger
         autocomplete.addListener('place_changed', onPlaceChanged)
     }
     function onPlaceChanged() {
+        // Function-wide variables:
+        const placeholderText = 'Enter a place'
         const placeData = autocomplete.getPlace()
-        // debugger
-        console.log(`placeData: ${JSON.stringify(placeData, null, 2)}`)
         let placeholder = document.getElementById('autocomplete').placeholder
         const alert = document.getElementById('alert')
         
         if (!placeData.geometry) {
             // User did not select a prediction; reset the input field
-            placeholder = 'Enter a place'
-            alert.innerText = `What is ${placeData.name} even? Select a suggestion from the dropdown`
+            placeholder = placeholderText
             alert.id = 'error'
+            alert.innerText = `What is ${placeData.name} even? Select a suggestion from the dropdown`
         } else {
             const loc = placeData.geometry.location
             const fullAddr = placeData.formatted_address
-            // debugger
+            alert.id = 'green'
             alert.innerText = `Marker for ${placeData.name} added!
             Click its marker on the map for more info.
             See below for superb photos of ${placeData.name}.`
-            alert.id = 'green'
 
-            const contentStr = 
-            '<div id="content">' +
-            '<div id="siteNotice">' +
-            "</div>" +
-            `<h1 id="firstHeading" class="firstHeading">${placeData.name}</h1>` +
-            "</div>"
+            const contentStr =
+                '<div id="content">' +
+                '<div id="siteNotice">' +
+                "</div>" +
+                `<h1 id="firstHeading" class="firstHeading">${fullAddr}</h1>` + "</div>"
 
             const infowindow = new google.maps.InfoWindow({
-                /*
-                content Type:  string|Element|Text
-                Can be an HTML element, a plain-text string, or a string containing HTML.
-                The InfoWindow will be sized according to the content.
-                To set an explicit size for the content, set content to be a HTML element with that size.
-                */
                 content: contentStr,
             })
-            // debugger
+
             const marker = new google.maps.Marker({
                 position: loc,
                 title: fullAddr,
@@ -163,44 +147,27 @@ function initMap(key) {
                     map,
                     shouldFocus: true,
                 })
-                // debugger
                 map.setZoom(15)
                 map.panTo(loc)
             })
 
-            // Update viewport using placeData.viewport
-            // debugger
-            // console.log(JSON.parse(JSON.stringify(placeData.geometry.viewport)))
+            // TODO: Update viewport using placeData.viewport
             // autocomplete.setBounds(JSON.parse(JSON.stringify(placeData.geometry.viewport)))
 
-            // Make Place Details request:
-            // const request = {
-            //     placeId: placeData.place_id,
-            //     fields: ['photos']
-            // }
-            // const service = new google.maps.places.PlacesService(map)
-            // const callback = (place, status) => {
-            //     if(status === google.maps.places.PlacesServiceStatus.OK){
-            //         console.log('Places Details success!')
-            //         console.log(place)
-            //     }
-            // }
-            // service.getDetails(request, callback)
-
-            // Build photo galery:
+            // Build photo gallery:
             const gallery = document.getElementById('photo-gallery')
             placeData.photos.forEach(photo => {
-                // debugger
-                // console.log(photo.getUrl())
-                const img = document.createElement('img')
-                img.id = 'photo'
-                img.src = photo.getUrl({maxWidth: 200, maxHeight: 200})
-                img.innerHTML = photo.html_attributions
-                gallery.appendChild(img)
-            });
+                // Weed out the low-rez photos:
+                if(photo.width > 500){
+                    const img = document.createElement('img')
+                    img.id = 'photo'
+                    img.src = photo.getUrl()
+                    gallery.appendChild(img)
+                }
+            })
 
-            // Reset the text box
-            document.getElementById('autocomplete').placeholder = 'Enter a place'
+            // Reset the input field
+            placeholder = placeholderText
         }
     }
 }
