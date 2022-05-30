@@ -34,6 +34,12 @@ function initMap(key) {
     // Initial location lat lngs:
     const centerUS = { lat: 39.833333, lng: -98.583333 }
     const apartment = { lat: 39.832740, lng: -75.152101 }
+    const contUSBounds = {
+        east: -66.9513812,
+        north: 49.3457868,
+        south: 24.7433195,
+        west: -124.7844079
+    }
 
     // The Loader object constructs the script loading URL with all its params
     const loader = new google.maps.plugins.loader.Loader({
@@ -48,7 +54,15 @@ function initMap(key) {
     const mapOptions = {
         center: centerUS,
         zoom: 4.5,
+        // Slightly reduce UI controls size (default: 40):
+        controlSize: 35,
+        // So smooth...
+        isFractionalZoomEnabled: true,
         mapTypeId: 'terrain',
+        // restriction: {
+            // latLngBounds: contUSBounds,
+        //     strictBounds: true,
+        // }
     }
     // debugger
     // Calling loader is the acutal "runner" "function"; all init calls need
@@ -70,7 +84,7 @@ function initMap(key) {
         .finally(() => console.log('🗺💯'))
     // debugger
     let autocomplete
-    const initAutocomplete = (map) => {
+    function initAutocomplete(){
         // debugger
         const input = document.getElementById('autocomplete')
         const options = {
@@ -84,18 +98,12 @@ function initMap(key) {
                 'name',
                 // 'place_id',
                 // photos returns <= 10 PlacePhoto objects of Place
-                // NOTE: No actual photos are returned
                 'photos',
                 // types returns arr of types for this Place
                 // 'types',
             ],
             // Bounds of continental US:
-            bounds: {
-                east: -66.9513812,
-                north: 49.3457868,
-                south: 24.7433195,
-                west: -124.7844079
-            },
+            bounds: contUSBounds,
             strictBounds: true,
         }
 
@@ -103,27 +111,25 @@ function initMap(key) {
         // debugger
         autocomplete.addListener('place_changed', onPlaceChanged)
     }
-    const onPlaceChanged = (e) => {
-        // debugger
+    function onPlaceChanged() {
         const placeData = autocomplete.getPlace()
+        // debugger
         console.log(`placeData: ${JSON.stringify(placeData, null, 2)}`)
         let placeholder = document.getElementById('autocomplete').placeholder
         const alert = document.getElementById('alert')
-        // let alertMsg = document.getElementById('alert').innerText
-
-        // autocomplete.bindTo('bounds', map)
+        
         if (!placeData.geometry) {
             // User did not select a prediction; reset the input field
             placeholder = 'Enter a place'
             alert.innerText = `What is ${placeData.name} even? Select a suggestion from the dropdown`
             alert.id = 'error'
         } else {
+            const loc = placeData.geometry.location
             // debugger
             alert.innerText = `Marker for ${placeData.name} added!
             Click its marker on the map for more info.
             See below for superb photos of ${placeData.name}.`
             alert.id = 'green'
-            // document.getElementById('details').innerText = JSON.stringify(placeData, null, 2)
 
             const contentStr = 
             '<div id="content">' +
@@ -133,11 +139,17 @@ function initMap(key) {
             "</div>"
 
             const infowindow = new google.maps.InfoWindow({
+                /*
+                content Type:  string|Element|Text
+                Can be an HTML element, a plain-text string, or a string containing HTML.
+                The InfoWindow will be sized according to the content.
+                To set an explicit size for the content, set content to be a HTML element with that size.
+                */
                 content: contentStr,
             })
 
             const marker = new google.maps.Marker({
-                position: placeData.geometry.location,
+                position: loc,
                 title: placeData.name,
                 map,
             })
@@ -148,6 +160,9 @@ function initMap(key) {
                     map,
                     shouldFocus: true,
                 })
+                // debugger
+                map.setZoom(15)
+                map.setCenter(loc)
             })
 
             // Update viewport using placeData.viewport
