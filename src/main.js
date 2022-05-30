@@ -1,10 +1,4 @@
-// require('dotenv').config()
-// import { Loader } from '@googlemaps/js-api-loader'
-// import { Loader } from './node_modules/@googlemaps/js-api-loader'
-
-
 document.addEventListener('DOMContentLoaded', () => {
-    // console.log(process.env)
     apiKey()
 })
 
@@ -15,17 +9,6 @@ function apiKey() {
         .catch(e => console.error('Fetch error:', e))
 }
 
-//=== For INLINE Google Map script loading: ===//
-// let map
-// function initMap() {
-//     map = new google.maps.Map(document.getElementById('map'), {
-//         center: { lat: 39.832920, lng: -75.151920 },
-//         zoom: 16,
-//     })
-// }
-// window.apiKey = apiKey
-// window.initMap = initMap
-
 // Going global with map variable
 let map
 
@@ -33,7 +16,6 @@ let map
 function initMap(key) {
     // Initial location lat lngs:
     const centerUS = { lat: 39.833333, lng: -98.583333 }
-    const apartment = { lat: 39.832740, lng: -75.152101 }
     const contUSBounds = {
         east: -66.9513812,
         north: 49.3457868,
@@ -59,19 +41,13 @@ function initMap(key) {
         // So smooth...
         isFractionalZoomEnabled: true,
         mapTypeId: 'terrain',
-        // restriction: {
-            // latLngBounds: contUSBounds,
-        //     strictBounds: true,
-        // }
     }
-    // debugger
     // Calling loader is the acutal "runner" "function"; all init calls need
         // to be in .then's anon arrow function!
     // NOTE: loader is the async call to GMaps API
     loader
         .load()
         .then(() => { // google not needed as arg for some reason 🤔
-            // debugger
             map = new google.maps.Map(document.getElementById('map'), mapOptions)
             initAutocomplete(map)
         })
@@ -83,7 +59,7 @@ function initMap(key) {
         const input = document.getElementById('autocomplete')
         const options = {
             componentRestrictions: { 'country': ['US'] },
-            // fields narrows results = less $ per search:
+            // fields narrow the results == less $ per search:
             fields: [
                 'formatted_address',
                 // geometry returns location & viewport objects
