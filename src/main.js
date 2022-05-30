@@ -92,14 +92,16 @@ function initMap(key) {
             componentRestrictions: { 'country': ['US'] },
             // fields narrows results = less $ per search:
             fields: [
+                'formatted_address',
                 // geometry returns location & viewport objects
-                'geometry', 
+                'geometry',
                 // name returns user's raw text input, exercise caution!
                 'name',
                 // 'place_id',
                 // photos returns <= 10 PlacePhoto objects of Place
                 'photos',
-                // types returns arr of types for this Place
+                // types returns arr of types for this Place (for example,
+                    // ["political", "locality"] or ["restaurant", "establishment"])
                 // 'types',
             ],
             // Bounds of continental US:
@@ -125,6 +127,7 @@ function initMap(key) {
             alert.id = 'error'
         } else {
             const loc = placeData.geometry.location
+            const fullAddr = placeData.formatted_address
             // debugger
             alert.innerText = `Marker for ${placeData.name} added!
             Click its marker on the map for more info.
@@ -147,10 +150,10 @@ function initMap(key) {
                 */
                 content: contentStr,
             })
-
+            // debugger
             const marker = new google.maps.Marker({
                 position: loc,
-                title: placeData.name,
+                title: fullAddr,
                 map,
             })
 
@@ -162,7 +165,7 @@ function initMap(key) {
                 })
                 // debugger
                 map.setZoom(15)
-                map.setCenter(loc)
+                map.panTo(loc)
             })
 
             // Update viewport using placeData.viewport
