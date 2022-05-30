@@ -28,3 +28,10 @@ body {
     justify-content: space-evenly;
     align-items: center;
 }
+#green {
+    color: green;
+}
+#error {
+    color: red;
+    font-weight: 900
+}

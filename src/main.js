@@ -42,7 +42,7 @@ function initMap(key) {
         authReferrerPolicy: 'origin', // May break if HTTP Referrer Restrictions
         language: 'en',                 // don't match
         region: 'US',
-        libraries: ['places'], // Adds add'l features like Places API
+        libraries: ['places'],
         authReferrerPolicy: 'origin'
     })
     const mapOptions = {
@@ -53,6 +53,7 @@ function initMap(key) {
     // debugger
     // Calling loader is the acutal "runner" "function"; all init calls need
         // to be in .then's anon arrow function!
+    // NOTE: loader is the async call to GMaps API
     loader
         .load()
         .then(() => { // google not needed as arg for some reason 🤔
@@ -68,69 +69,79 @@ function initMap(key) {
         .catch(e => console.error('Loader error:', e))
         .finally(() => console.log('🗺💯'))
     // debugger
-    // Places autocomplete text box:
     let autocomplete
     const initAutocomplete = (map) => {
         // debugger
-        autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('autocomplete'),
-            {
-                // types: ['establishment'],
-                componentRestrictions: { 'country': ['US'] },
-                // fields narrows results = less $ per search:
-                fields: [
-                    // geometry returns location & viewport objects
-                    'geometry', 
-                    // name returns user's raw text input, exercise caution!
-                    'name',
-                    // 'place_id',
-                    // photos returns <= 10 PlacePhoto objects of Place
-                    // NOTE: No actual photos are returned
-                    'photos',
-                    // types returns arr of types for this Place
-                    // 'types',
-                ],
-                bounds: {
-                    east: -66.9513812,
-                    north: 49.3457868,
-                    south: 24.7433195,
-                    west: -124.7844079
-                },
-                strictBounds: true,
-            })
-            // debugger
+        const input = document.getElementById('autocomplete')
+        const options = {
+            // types: ['establishment'],
+            componentRestrictions: { 'country': ['US'] },
+            // fields narrows results = less $ per search:
+            fields: [
+                // geometry returns location & viewport objects
+                'geometry', 
+                // name returns user's raw text input, exercise caution!
+                'name',
+                // 'place_id',
+                // photos returns <= 10 PlacePhoto objects of Place
+                // NOTE: No actual photos are returned
+                'photos',
+                // types returns arr of types for this Place
+                // 'types',
+            ],
+            // Bounds of continental US:
+            bounds: {
+                east: -66.9513812,
+                north: 49.3457868,
+                south: 24.7433195,
+                west: -124.7844079
+            },
+            strictBounds: true,
+        }
+
+        autocomplete = new google.maps.places.Autocomplete(input, options)
+        // debugger
         autocomplete.addListener('place_changed', onPlaceChanged)
     }
-    const onPlaceChanged = () => {
+    const onPlaceChanged = (e) => {
         // debugger
         const placeData = autocomplete.getPlace()
         console.log(`placeData: ${JSON.stringify(placeData, null, 2)}`)
+        let placeholder = document.getElementById('autocomplete').placeholder
+        const alert = document.getElementById('alert')
+        // let alertMsg = document.getElementById('alert').innerText
+
         // autocomplete.bindTo('bounds', map)
         if (!placeData.geometry) {
             // User did not select a prediction; reset the input field
-            document.getElementById('autocomplete').placeholder = 'Enter a place'
+            placeholder = 'Enter a place'
+            alert.innerText = `What is ${placeData.name} even? Select a suggestion from the dropdown`
+            alert.id = 'error'
         } else {
             // debugger
-            document.getElementById('alert').innerText = `Marker for ${placeData.name} added!
+            alert.innerText = `Marker for ${placeData.name} added!
             Click its marker on the map for more info.
             See below for superb photos of ${placeData.name}.`
+            alert.id = 'green'
             // document.getElementById('details').innerText = JSON.stringify(placeData, null, 2)
-            
-            
+
             const contentStr = 
             '<div id="content">' +
             '<div id="siteNotice">' +
             "</div>" +
             `<h1 id="firstHeading" class="firstHeading">${placeData.name}</h1>` +
             "</div>"
+
             const infowindow = new google.maps.InfoWindow({
                 content: contentStr,
             })
+
             const marker = new google.maps.Marker({
                 position: placeData.geometry.location,
                 title: placeData.name,
                 map,
             })
+
             marker.addListener('click', () => {
                 infowindow.open({
                     anchor: marker,
