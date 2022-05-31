@@ -4,7 +4,7 @@ Using **HTML**, **CSS**, **JavaScript** and the **Google Maps JavaScript API**
 
 ## Installation
 
-`npm install`
+Fork, clone, and `npm install`
 
 ## Usage
 
