@@ -7,23 +7,9 @@
     <title>Flatiron Phase 1 Project</title>
 
     <link rel="stylesheet" type="text/css" href="./style.css">
-    <!-- Inline Google Map script loading: -->
-    <!-- <script
-        src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&v=weekly"
-        defer
-    ></script> -->
-    
+
     <!-- Dynamic Google Map script loading with js-api-loader via umd unpkg link: -->
     <script src="https://unpkg.com/@googlemaps/js-api-loader@1.14.3/dist/index.min.js"></script>
-
-    <!-- Allow import to work in main.js -->
-    <!-- <script type="importmap">
-    {
-        "imports": {
-            "@googlemaps/js-api-loader": "./node_modules/@googlemaps/js-api-loader/"
-        }
-    }
-    </script> -->
 
     <script src="./src/main.js" type="module"></script>
 </head>
@@ -31,11 +17,8 @@
     <h1>Put Your Favorite Place On the Map</h1>
     <h2>(within the continental US)</h2>
     <h3>Start typing an address or place and<br>select a suggestion from the dropdown</h3>
-    <div id="tbWrapper">
-        <input id="autocomplete" name="autocomplete" placeholder="Miami Beach" type="text" size="60" autofocus/>
-        <p id="alert"></p>
-    </div>
-    <p id="details"></p>
+    <input id="autocomplete" name="autocomplete" placeholder="Miami Beach" type="text" size="60" autofocus/>
+    <p id="alert"></p>
     <div id="map"></div>
     <div id="photo-gallery"></div>
 </body>
