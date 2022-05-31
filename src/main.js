@@ -77,29 +77,38 @@ function initMap(key) {
             bounds: contUSBounds,
             strictBounds: true,
         }
-
         autocomplete = new google.maps.places.Autocomplete(input, options)
         autocomplete.addListener('place_changed', onPlaceChanged)
     }
+
     function onPlaceChanged() {
         // Function-wide variables:
         const placeholderText = 'Enter a place'
         const placeData = autocomplete.getPlace()
         let placeholder = document.getElementById('autocomplete').placeholder
-        const alert = document.getElementById('alert')
-        
+        let alert = document.getElementById('alert')
         if (!placeData.geometry) {
             // User did not select a prediction; reset the input field
             placeholder = placeholderText
             alert.id = 'error'
-            alert.innerText = `What is ${placeData.name} even? Select a suggestion from the dropdown`
+            alert.innerText = `What is ${placeData.name} even? Select a suggestion from the dropdown.`
         } else {
             const loc = placeData.geometry.location
             const fullAddr = placeData.formatted_address
             alert.id = 'green'
             alert.innerText = `Marker for ${placeData.name} added!
-            Click its marker on the map for more info.
-            See below for superb photos of ${placeData.name}.`
+            Click its marker on the map for more info.`
+            
+            if (placeData.photos) {
+                buildPhotoGallery()
+                alert.innerText = alert.innerText.concat('\n', `See below for superb photos of ${placeData.name}.`)
+            }
+
+            const marker = new google.maps.Marker({
+                position: loc,
+                title: fullAddr,
+                map,
+            })
 
             const contentStr =
                 '<div id="content">' +
@@ -109,12 +118,6 @@ function initMap(key) {
 
             const infowindow = new google.maps.InfoWindow({
                 content: contentStr,
-            })
-
-            const marker = new google.maps.Marker({
-                position: loc,
-                title: fullAddr,
-                map,
             })
 
             marker.addListener('click', () => {
@@ -130,31 +133,20 @@ function initMap(key) {
             // TODO: Update viewport using placeData.viewport
             // autocomplete.setBounds(JSON.parse(JSON.stringify(placeData.geometry.viewport)))
 
-            // Build photo gallery:
-            const gallery = document.getElementById('photo-gallery')
-            placeData.photos.forEach(photo => {
-                // Weed out the low-rez photos:
-                if(photo.width > 500){
-                    const img = document.createElement('img')
-                    img.id = 'photo'
-                    img.src = photo.getUrl()
-                    gallery.appendChild(img)
-                }
-            })
-
+            function buildPhotoGallery() {
+                const gallery = document.getElementById('photo-gallery')
+                placeData.photos.forEach(photo => {
+                    // Weed out the low-rez photos:
+                    if(photo.width > 500){
+                        const img = document.createElement('img')
+                        img.id = 'photo'
+                        img.src = photo.getUrl()
+                        gallery.appendChild(img)
+                    }
+                })
+            }
             // Reset the input field
             placeholder = placeholderText
         }
     }
 }
-
-var docWidth = document.documentElement.offsetWidth;
-
-[].forEach.call(
-  document.querySelectorAll('*'),
-  function(el) {
-    if (el.offsetWidth > docWidth) {
-      console.log(el);
-    }
-  }
-);
