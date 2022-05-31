@@ -123,7 +123,7 @@ function initMap(key) {
                     map,
                     shouldFocus: true,
                 })
-                map.setZoom(15)
+                map.setZoom(13)
                 map.panTo(loc)
             })
 
@@ -147,3 +147,14 @@ function initMap(key) {
         }
     }
 }
+
+var docWidth = document.documentElement.offsetWidth;
+
+[].forEach.call(
+  document.querySelectorAll('*'),
+  function(el) {
+    if (el.offsetWidth > docWidth) {
+      console.log(el);
+    }
+  }
+);

@@ -14,3 +14,4 @@ Using **HTML**, **CSS**, **JavaScript** and the **Google Maps JavaScript API**
 
 ## TODO
 - Update `map`'s `viewport` within `onPlaceChanged()` using `placeData.viewport`
+- Stick background gradient ends to top and bottom of webpage dynamically
