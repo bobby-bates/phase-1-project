@@ -35,7 +35,7 @@ function initMap(key) {
     })
     const mapOptions = {
         center: centerUS,
-        zoom: 4.5,
+        zoom: 4.2,
         // Slightly reduce UI controls size (default: 40):
         controlSize: 35,
         // So smooth...

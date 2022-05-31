@@ -18,8 +18,12 @@ body {
     padding: 0;
     text-align: center;
     font-family: Helvetica, sans-serif;
+    color: #1a2b2b;
     /* TODO: Stick gradient ends to top and bottom of webpage dynamically */
     background: linear-gradient(0deg, rgba(192,255,200,0.5), rgba(137,179,250,1) 6%, 96%, rgba(192,255,200,0.5));
+}
+#autocomplete {
+    border: solid 0.5rem #1a2b2b;
 }
 #photo-gallery {
     display: flex;
@@ -31,7 +35,8 @@ body {
 }
 #photo {
     max-width: 40%;
-    padding: 1rem 0;
+    border: solid 0.5rem #1a2b2b;
+    margin: 1rem 0;
 }
 #green {
     color: green;
