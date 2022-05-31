@@ -34,6 +34,7 @@ body {
     padding-top: 0.5rem;
 }
 #photo {
+    max-height: 500px;
     max-width: 40%;
     border: solid 0.5rem #1a2b2b;
     margin: 1rem 0;
