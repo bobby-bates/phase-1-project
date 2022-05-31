@@ -9,8 +9,11 @@ Using **HTML**, **CSS**, **JavaScript** and the **Google Maps JavaScript API**
 ## Usage
 
 ![Image](https://i.imgur.com/RJT2mWK.png)
+*Google Maps Places API Autocomplete textbox in action:*
 ![Image](https://i.imgur.com/78NwXGR.png)
 ![Image](https://i.imgur.com/AvtYRUf.jpg)
+*Click the new marker on the map to see your Place:*
+![Image](https://i.imgur.com/rQBhpNI.png)
 
 ## TODO
 - Persistence of Favorite Places on server
