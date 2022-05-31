@@ -8,9 +8,9 @@ Using **HTML**, **CSS**, **JavaScript** and the **Google Maps JavaScript API**
 
 ## Usage
 
-![Image](https://i.imgur.com/lznLsFX.png)
-![Image](https://i.imgur.com/JBK1mh7.png)
-![Image](https://i.imgur.com/OjcSECy.jpg)
+![Image](https://i.imgur.com/RJT2mWK.png)
+![Image](https://i.imgur.com/78NwXGR.png)
+![Image](https://i.imgur.com/AvtYRUf.jpg)
 
 ## TODO
 - Persistence of Favorite Places on server
