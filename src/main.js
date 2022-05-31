@@ -9,7 +9,7 @@ function apiKey() {
         .catch(e => console.error('Fetch error:', e))
 }
 
-// Going global with map variable
+// Going global with map variable:
 let map
 
 //=== For DYNAMIC Google Map script loading: ===//
@@ -142,6 +142,9 @@ function initMap(key) {
                         img.id = 'photo'
                         img.src = photo.getUrl()
                         gallery.appendChild(img)
+                        img.addEventListener('dblclick', () => {
+                            img.requestFullscreen()
+                        })
                     }
                 })
             }

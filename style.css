@@ -46,3 +46,7 @@ body {
     color: red;
     font-weight: 900
 }
+.full-screen {
+    height: 100%;
+    width: 100%;
+}
