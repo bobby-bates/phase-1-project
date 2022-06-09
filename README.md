@@ -18,7 +18,7 @@ Fork, clone, and `npm install`
 *Click the new marker on the map to see your Place:*
 ![Image](https://i.imgur.com/rQBhpNI.png)
 
-## TODO
+## `// TODO:`
 - Persistence of Favorite Places on server
 - Update `map`'s `viewport` within `onPlaceChanged()` using `placeData.viewport`
 - Stick background gradient ends to top and bottom of webpage dynamically
